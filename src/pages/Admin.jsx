@@ -15,7 +15,7 @@ function Admin() {
             setPokemones(guardadosLocalstorage)
             setCargando(false)
         } else {
-            fetch("src/data/pokemones.json")
+            fetch(import.meta.env.BASE_URL + 'data/pokemones.json')
                 .then((res) => res.json())
                 .then((data) => {
                     setPokemones(data)
