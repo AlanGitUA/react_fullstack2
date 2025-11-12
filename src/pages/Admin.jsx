@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import FormularioPokemon from "../components/FormularioPokemon"
 import { loadFromLocalstorage, saveLocalstorage } from "../utils/localstorageHelper"
+import { getPokemones } from "../utils/apiHelper"
 
 function Admin() {
     const [pokemones, setPokemones] = useState([])
@@ -9,23 +10,14 @@ function Admin() {
     const [cargando, setCargando] = useState(true)
 
     //useEffect carga datos desde lugares externo:
-    useEffect(() => {
+    useEffect(async () => {
         const guardadosLocalstorage = loadFromLocalstorage("pokemones")
         if (guardadosLocalstorage) {
             setPokemones(guardadosLocalstorage)
             setCargando(false)
         } else {
-            fetch(import.meta.env.BASE_URL + 'data/pokemones.json')
-                .then((res) => res.json())
-                .then((data) => {
-                    setPokemones(data)
-
-                    setTimeout(() => {
-                        setCargando(false)
-                    }, 2000);
-
-                })
-                .catch((ex) => console.error("Error al obtener pokemones:", ex))
+            const data = await getPokemones()
+            setPokemones(data)
         }
     }, [])
 
